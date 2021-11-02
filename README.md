@@ -1,4 +1,4 @@
-# movie-api
-Movie API - Node.js
 
 # Movie App
+
+Movie app with using Node.js.
