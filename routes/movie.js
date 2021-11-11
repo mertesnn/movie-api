@@ -11,10 +11,10 @@ router.post( '/', ( req , res , next ) => {
 
   movie.save()
       .then( ( data )  => {
-    res.json( { status : 1 } );
+        res.json( { status : 1 } );
       })
       .catch( ( err ) => {
-    res.json( err );
+        res.json( err );
       });
 });
 
