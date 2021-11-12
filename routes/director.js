@@ -17,4 +17,18 @@ router.post( '/' , ( req , res , next ) => {
         });
 });
 
+// `GET` => List all directors.
+router.get( '/' , ( req , res , next ) => {
+    Director.find( {  } )
+        .then( ( data ) => {
+            if ( !data )
+                return next( { error_code: 2 , error_message: 'Director not found.' } );
+
+            res.json( data );
+        })
+        .catch( ( err ) => {
+            res.json( err );
+        });
+});
+
 module.exports = router;
