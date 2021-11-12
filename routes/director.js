@@ -58,7 +58,7 @@ router.get( '/' , ( req , res , next ) => {
         }
     ]).then( ( data ) => {
         if ( !data )
-            return next( { error_code : 2 , error_message : 'Director not found.' } );
+            return next( { errorCode : 2 , errorMessage : 'Director not found.' } );
 
         res.json( data );
     }).catch( ( err ) => {
@@ -111,7 +111,7 @@ router.get( '/:director_id' , ( req , res , next ) => {
         }
     ]).then( ( data ) => {
         if ( !data )
-            return next( { error_code : 2 , error_message : 'Director not found.' } );
+            return next( { errorCode : 2 , errorMessage : 'Director not found.' } );
 
         res.json( data );
     }).catch( ( err ) => {
@@ -124,7 +124,7 @@ router.put( '/:director_id' , ( req , res , next ) => {
    Director.findByIdAndUpdate( req.params.director_id , req.body , { new : true } )
        .then( ( data ) => {
            if ( !data )
-               return next( { error_code : 2 , error_message : 'Director not found.' } );
+               return next( { errorCode : 2 , errorMessage : 'Director not found.' } );
 
            res.json( data );
        })
@@ -138,7 +138,7 @@ router.delete( '/:director_id' , ( req , res , next ) => {
     Director.findByIdAndDelete( req.params.director_id )
         .then( ( data ) => {
             if ( !data )
-                return next( { error_code : 2 , error_message : 'Director not found.' } );
+                return next( { errorCode : 2 , errorMessage : 'Director not found.' } );
 
             res.json( { status : 1 , message : 'Deleted successfully.' } );
         })

@@ -20,14 +20,35 @@ router.post( '/', ( req , res , next ) => {
 });
 
 // `GET` => List all movies.
-router.get( '/' , ( req , res ) => {
-    Movie.find( {  } )
+router.get( '/' , ( req , res , next ) => {
+    /*Movie.find( {  } )
         .then( ( data ) => {
             res.json( data );
         })
         .catch( ( err ) => {
             res.json( err );
-        });
+        });*/
+
+    Movie.aggregate([
+        {
+            $lookup             : {
+                from            : 'directors',
+                localField      : 'director_id',
+                foreignField    : '_id',
+                as              : 'directors'
+            }
+        },
+        {
+            $unwind             : '$directors'
+        }
+    ]).then( ( data ) => {
+        if ( !data )
+            return next( { errorCode : 1, errorMessage : 'Movie not found.' } );
+
+        res.json( data );
+    }).catch( ( err ) => {
+        res.json( err );
+    });
 });
 
 // `GET` => Get the Top10 movies.
