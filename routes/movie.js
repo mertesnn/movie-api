@@ -21,14 +21,6 @@ router.post( '/', ( req , res , next ) => {
 
 // `GET` => List all movies.
 router.get( '/' , ( req , res , next ) => {
-    /*Movie.find( {  } )
-        .then( ( data ) => {
-            res.json( data );
-        })
-        .catch( ( err ) => {
-            res.json( err );
-        });*/
-
     Movie.aggregate([
         {
             $lookup             : {
