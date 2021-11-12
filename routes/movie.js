@@ -18,4 +18,27 @@ router.post( '/', ( req , res , next ) => {
       });
 });
 
+router.get( '/' , ( req , res ) => {
+    Movie.find( {  } )
+        .then( ( data ) => {
+            res.json( data );
+        })
+        .catch( ( err ) => {
+            res.json( err );
+        });
+});
+
+router.get( '/:movie_id' , ( req , res , next ) => {
+    Movie.findById( req.params.movie_id )
+        .then( ( data ) => {
+            if ( !data )
+                return next( { errorCode : 1, errorMessage : 'Movie not found.' } );
+
+            res.json( data );
+        })
+        .catch( ( err ) => {
+            res.json( err );
+        });
+});
+
 module.exports = router;

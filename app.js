@@ -24,7 +24,7 @@ app.use( express.static( path.join( __dirname, 'public' ) ) );
 
 // Routes
 app.use( '/', indexRouter );
-app.use( '/api/movie', movieRouter );
+app.use( '/api/movies', movieRouter );
 
 // Catch 404
 app.use( ( req , res , next ) => {
@@ -37,7 +37,7 @@ app.use( ( err , req , res , next ) => {
   res.locals.error = req.app.get( 'env' ) === 'development' ? err : {};
 
   res.status(err.status || 500);
-  res.render( 'error' );
+  res.json( { error : { error_code : err.errorCode , error_message : err.errorMessage } } );
 });
 
 module.exports = app;
