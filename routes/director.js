@@ -31,4 +31,18 @@ router.get( '/' , ( req , res , next ) => {
         });
 });
 
+// `GET` => Get a director.
+router.get( '/:director_id' , ( req , res , next ) => {
+    Director.findById( req.params.director_id )
+        .then( ( data ) => {
+            if ( !data )
+                return next( { error_code: 2 , error_message: 'Director not found.' } );
+
+            res.json( data );
+        })
+        .catch( ( err ) => {
+            res.json( err );
+        });
+});
+
 module.exports = router;
