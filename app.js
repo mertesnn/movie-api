@@ -4,8 +4,9 @@ const path          = require( 'path' );
 const cookieParser  = require( 'cookie-parser' );
 const logger        = require( 'morgan' );
 
-const indexRouter   = require( './routes/index' );
-const movieRouter   = require( './routes/movie' );
+const indexRouter     = require( './routes/index' );
+const movieRouter     = require( './routes/movie' );
+const directorRouter  = require( './routes/director' );
 
 const app = express();
 
@@ -25,6 +26,7 @@ app.use( express.static( path.join( __dirname, 'public' ) ) );
 // Routes
 app.use( '/', indexRouter );
 app.use( '/api/movies', movieRouter );
+app.use( '/api/directors', directorRouter );
 
 // Catch 404
 app.use( ( req , res , next ) => {
