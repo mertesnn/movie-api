@@ -22,7 +22,7 @@ router.get( '/' , ( req , res , next ) => {
     Director.find( {  } )
         .then( ( data ) => {
             if ( !data )
-                return next( { error_code: 2 , error_message: 'Director not found.' } );
+                return next( { error_code : 2 , error_message : 'Director not found.' } );
 
             res.json( data );
         })
@@ -36,13 +36,27 @@ router.get( '/:director_id' , ( req , res , next ) => {
     Director.findById( req.params.director_id )
         .then( ( data ) => {
             if ( !data )
-                return next( { error_code: 2 , error_message: 'Director not found.' } );
+                return next( { error_code : 2 , error_message : 'Director not found.' } );
 
             res.json( data );
         })
         .catch( ( err ) => {
             res.json( err );
         });
+});
+
+// `PUT` => Update a director.
+router.put( '/:director_id' , ( req , res , next ) => {
+   Director.findByIdAndUpdate( req.params.director_id , req.body , { new : true } )
+       .then( ( data ) => {
+           if ( !data )
+               return next( { error_code : 2 , error_message : 'Director not found.' } );
+
+           res.json( data );
+       })
+       .catch( ( err ) => {
+          res.json( err );
+       });
 });
 
 module.exports = router;
