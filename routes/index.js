@@ -1,3 +1,4 @@
+const bcrypt  = require( 'bcryptjs' );
 const express = require( 'express' );
 const router  = express.Router();
 
@@ -9,15 +10,19 @@ router.get( '/', ( req , res , next ) => {
 });
 
 router.post( '/register' , ( req , res , next) => {
-  const user = new User( req.body );
+    const { username , password } = req.body;
 
-  user.save()
-      .then( ( data ) => {
-        res.json( data );
-      })
-      .catch( ( err ) => {
-        res.json( err );
-      });
+    bcrypt.hash( password , 10 , ( err , data) => {
+        const user = new User( { username , password: data } );
+
+        user.save()
+            .then( ( data ) => {
+                res.json( data );
+            })
+            .catch( ( err ) => {
+                res.json( err );
+            });
+    });
 });
 
 module.exports = router;
