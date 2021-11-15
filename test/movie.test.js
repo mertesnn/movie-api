@@ -60,18 +60,10 @@ describe( '## Movies tests' , () => {
         });
     });
 
-    describe( '# Update a movie.' , () => {
-        it( '( PUT /api/movies/:movie_id ) Movies Page' , ( done ) => {
+    describe( '# Get a movie by ID.' , () => {
+       it( '( GET /api/movies/:movie_id )' , ( done ) => {
            chai.request( server )
-               .put( '/api/movies/' + movieId )
-               .send({
-                   director_id :'618e4b008331a317a2a69b89' ,
-                   title       : 'güncellenmiş film',
-                   category    : 'doğaüstü',
-                   country     : 'türkiye',
-                   year        : 2001,
-                   imdb_score  : 4
-               })
+               .get( '/api/movies/' + movieId )
                .set( 'x-access-token' , token )
                .end( ( err , res ) => {
                    res.should.have.status( 200 );
@@ -85,6 +77,50 @@ describe( '## Movies tests' , () => {
                    res.body.should.have.property( '_id' ).eql( movieId );
                    done();
                });
+       });
+    });
+
+    describe( '# Update a movie.' , () => {
+        it( '( PUT /api/movies/:movie_id ) Movies Page' , ( done ) => {
+            const movie = {
+                director_id :'618e4b008331a317a2a69b89' ,
+                title       : 'güncellenmiş film',
+                category    : 'doğaüstü',
+                country     : 'türkiye',
+                year        : 2001,
+                imdb_score  : 4
+            };
+           chai.request( server )
+               .put( '/api/movies/' + movieId )
+               .send(movie)
+               .set( 'x-access-token' , token )
+               .end( ( err , res ) => {
+                   res.should.have.status( 200 );
+                   res.body.should.be.a( 'object' );
+                   res.body.should.have.property( 'director_id' ).eql( movie.director_id );
+                   res.body.should.have.property( 'title' ).eql( movie.title );
+                   res.body.should.have.property( 'category' ).eql( movie.category );
+                   res.body.should.have.property( 'country' ).eql( movie.country );
+                   res.body.should.have.property( 'year' ).eql( movie.year );
+                   res.body.should.have.property( 'imdb_score' ).eql( movie.imdb_score );
+                   res.body.should.have.property( '_id' ).eql( movieId );
+                   done();
+               });
+        });
+    });
+
+    describe( '# Delete a movie.' , () => {
+        it( '( DELETE /api/movies/:movie_id ) Movies Page' , ( done ) => {
+            chai.request( server )
+                .delete( '/api/movies/' + movieId )
+                .set( 'x-access-token' , token )
+                .end( ( err , res ) => {
+                    res.should.have.status( 200 );
+                    res.body.should.be.a( 'object' );
+                    res.body.should.have.property( 'status' ).eql( 1 );
+                    res.body.should.have.property( 'message' ).eql( 'Deleted successfully.' );
+                    done();
+                });
         });
     });
 });
