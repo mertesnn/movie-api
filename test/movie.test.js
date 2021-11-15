@@ -1,7 +1,6 @@
 const chai      = require( 'chai' );
 const chaiHttp  = require( 'chai-http' );
 const server    = require( '../app' );
-const {describe} = require("mocha/lib/cli/run");
 const should    = chai.should();
 
 chai.use( chaiHttp );
@@ -58,6 +57,34 @@ describe( '## Movies tests' , () => {
                     movieId = res.body._id;
                     done();
                 });
+        });
+    });
+
+    describe( '# Update a movie.' , () => {
+        it( '( PUT /api/movies/:movie_id ) Movies Page' , ( done ) => {
+           chai.request( server )
+               .put( '/api/movies/' + movieId )
+               .send({
+                   director_id :'618e4b008331a317a2a69b89' ,
+                   title       : 'güncellenmiş film',
+                   category    : 'doğaüstü',
+                   country     : 'türkiye',
+                   year        : 2001,
+                   imdb_score  : 4
+               })
+               .set( 'x-access-token' , token )
+               .end( ( err , res ) => {
+                   res.should.have.status( 200 );
+                   res.body.should.be.a( 'object' );
+                   res.body.should.have.property( 'director_id' );
+                   res.body.should.have.property( 'title' );
+                   res.body.should.have.property( 'category' );
+                   res.body.should.have.property( 'country' );
+                   res.body.should.have.property( 'year' );
+                   res.body.should.have.property( 'imdb_score' );
+                   res.body.should.have.property( '_id' ).eql( movieId );
+                   done();
+               });
         });
     });
 });
