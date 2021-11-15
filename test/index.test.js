@@ -5,7 +5,7 @@ const should    = chai.should();
 
 chai.use( chaiHttp );
 
-describe( 'Node Server' , () => {
+describe( '## Page tests' , () => {
     it( '( GET / ) Index Page' , ( done ) => {
         chai.request( server )
             .get( '/' )

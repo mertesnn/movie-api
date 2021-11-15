@@ -1,11 +1,12 @@
 const chai      = require( 'chai' );
 const chaiHttp  = require( 'chai-http' );
 const server    = require( '../app' );
+const {describe} = require("mocha/lib/cli/run");
 const should    = chai.should();
 
 chai.use( chaiHttp );
 
-let token;
+let token , movieId;
 
 describe( '## Movies tests' , () => {
     before( ( done ) => {
@@ -29,6 +30,34 @@ describe( '## Movies tests' , () => {
                     done();
                 });
 
+        });
+    });
+
+    describe( '# Create a new movie.' , () => {
+        it( '( POST /api/movies ) Movies Page' , ( done ) => {
+            chai.request( server )
+                .post( '/api/movies' )
+                .send({
+                    director_id :'618e4b008331a317a2a69b89' ,
+                    title       : 'Yepis yeni film',
+                    category    : 'doğaüstü',
+                    country     : 'Afrika',
+                    year        : 2021,
+                    imdb_score  : 10
+                })
+                .set( 'x-access-token' , token )
+                .end( ( err , res ) => {
+                    res.should.have.status( 200 );
+                    res.body.should.be.a( 'object' );
+                    res.body.should.have.property( 'director_id' );
+                    res.body.should.have.property( 'title' );
+                    res.body.should.have.property( 'category' );
+                    res.body.should.have.property( 'country' );
+                    res.body.should.have.property( 'year' );
+                    res.body.should.have.property( 'imdb_score' );
+                    movieId = res.body._id;
+                    done();
+                });
         });
     });
 });
