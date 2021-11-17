@@ -2,6 +2,7 @@ const chai      = require( 'chai' );
 const chaiHttp  = require( 'chai-http' );
 const server    = require( '../app' );
 const should    = chai.should();
+const expect    = chai.expect;
 
 chai.use( chaiHttp );
 
@@ -121,6 +122,28 @@ describe( '## Movies tests' , () => {
                     res.body.should.have.property( 'message' ).eql( 'Deleted successfully.' );
                     done();
                 });
+        });
+    });
+
+    describe( '# Movies between two dates.' , () => {
+        it( '( GET /api/movies/between/:start_year/:end_year ) Movies Page' , ( done ) => {
+           chai.request( server )
+               .get( '/api/movies/between/2000/2010' )
+               .set( 'x-access-token' , token )
+               .end( ( err , res ) => {
+                   res.should.have.status( 200 );
+                   res.body.should.have.be.a( 'array' );
+
+                   let years = [];
+
+                   res.body.forEach( ( e ) => {
+                       if ( e.year <= 2010 && e.year >= 2000 )
+                           years.push( e.year )
+                   });
+
+                   expect( years ).to.have.members( [ 2000 ] );
+                   done();
+               });
         });
     });
 });
