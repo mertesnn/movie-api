@@ -1,6 +1,8 @@
-# Movie App - Tilky
+# Movie API - Tilky
 
-Movie app with using Node.js, Express, MongoDB.
+Movie API with using Node.js, Express, MongoDB. 
+
+Demo : https://tilky-movie-api.herokuapp.com/
 
 # Movies
 
