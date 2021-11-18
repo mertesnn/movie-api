@@ -6,7 +6,7 @@ const expect    = chai.expect;
 
 chai.use( chaiHttp );
 
-let token;
+let token , directorId;
 
 describe( '## Director Tests' , () => {
     before( ( done ) => {
@@ -50,6 +50,28 @@ describe( '## Director Tests' , () => {
                     res.body.should.have.property( 'name' ).eql( newDirector.name );
                     res.body.should.have.property( 'surname' ).eql( newDirector.surname );
                     res.body.should.have.property( 'bio' ).eql( newDirector.bio );
+                    directorId = res.body._id;
+                    done();
+                });
+        });
+    });
+
+    describe( '# Get a director' , () => {
+        it( '( GET /api/directors/:director_id ) Directors Page' , ( done ) => {
+            chai.request( server )
+                .get( '/api/directors/' + directorId )
+                .set( 'x-access-token' , token)
+                .end( ( err , res ) => {
+                    res.should.have.status( 200 );
+                    res.body.should.have.be.a( 'array' );
+
+                    let director = [];
+
+                    res.body.forEach( ( e ) => {
+                       director.push( e.name , e.surname );
+                    });
+
+                    expect( director ).to.have.members( [ 'new' , 'director' ] );
                     done();
                 });
         });
