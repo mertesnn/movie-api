@@ -77,7 +77,7 @@ describe( '## Director Tests' , () => {
         });
     });
 
-    describe( '# Update a director.' , () => {
+    describe( '# Update a director' , () => {
        it( '( POST /api/directors/:director_id ) Directors Page' , ( done ) => {
            const updateDirector = {
                name     : 'updated name',
@@ -99,5 +99,20 @@ describe( '## Director Tests' , () => {
                    done();
                });
        });
+    });
+
+    describe( '# Delete a director' , () => {
+        it( '( POST /api/directors/:movie_id ) Directors Page' , ( done ) => {
+            chai.request( server )
+                .delete( '/api/directors/' + directorId )
+                .set( 'x-access-token' , token )
+                .end( ( err , res ) => {
+                    res.should.have.status( 200 );
+                    res.body.should.have.be.a( 'object' );
+                    res.body.should.have.property( 'status' ).eql( 1 );
+                    res.body.should.have.property( 'message' ).eql( 'Deleted successfully.' );
+                    done();
+                });
+        });
     });
 });
