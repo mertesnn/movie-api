@@ -115,4 +115,23 @@ describe( '## Director Tests' , () => {
                 });
         });
     });
+
+    describe( "# Director's top 10 movies" , () => {
+        it( '( GET /api/directors/:director_id/best10movie ) Directors Page' , ( done ) => {
+           chai.request( server )
+               .get( '/api/directors/618e4b008331a317a2a69b89/best10movie' )
+               .set( 'x-access-token' , token )
+               .end( ( err , res ) => {
+                   res.should.have.status( 200 );
+                   res.body.should.have.be.a( 'array' );
+
+                   let best10Movies = [];
+
+                   res.body.forEach( ( e ) => {
+                      e.director_id.should.have.eql( '618e4b008331a317a2a69b89' );
+                   });
+                   done();
+               });
+        });
+    });
 });
