@@ -147,4 +147,57 @@ router.delete( '/:director_id' , ( req , res , next ) => {
         });
 });
 
+// `GET` => Director's top 10 movies
+router.get( '/:director_id/best10movie' , ( req , res , next ) => {
+    Director.aggregate([
+        {
+            $match          : {
+                _id         : mongoose.Types.ObjectId( req.params.director_id )
+            }
+        },
+        {
+            $lookup         : {
+                from        : 'movies',
+                localField  : '_id',
+                foreignField: 'director_id',
+                as          : 'movies'
+            }
+        },
+        {
+            $unwind         : '$movies'
+        },
+        {
+            $sort           : {
+                imdb_score  : 1
+            }
+        },
+        {
+            $limit          : 10
+        },
+        {
+            $group: {
+                _id: {
+                    _id: '$_id'
+                },
+                movies: {
+                    $push: '$movies'
+                }
+            }
+        },
+        {
+            $project: {
+                _id: false,
+                movies: '$movies'
+            }
+        }
+    ]).then( ( data ) => {
+        if( !data )
+            return next( { errorCode : 2 , errorMessage : 'Director not found.' } );
+
+        res.json( data[0].movies );
+    }).catch( ( err ) => {
+        res.json( err );
+    });
+});
+
 module.exports = router;
