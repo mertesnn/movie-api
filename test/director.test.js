@@ -31,4 +31,27 @@ describe( '## Director Tests' , () => {
                });
         });
     });
+
+    describe( '# Create a new director' , () => {
+        it( '( POST /api/directors ) Directors Page' , ( done ) => {
+            const newDirector = {
+                name    : 'new',
+                surname : 'director',
+                bio     : 'lorem ipsum dolor'
+            };
+
+            chai.request( server )
+                .post( '/api/directors' )
+                .send( newDirector )
+                .set( 'x-access-token' , token )
+                .end( ( err , res ) => {
+                    res.should.have.status( 200 );
+                    res.body.should.have.be.a( 'object' );
+                    res.body.should.have.property( 'name' ).eql( newDirector.name );
+                    res.body.should.have.property( 'surname' ).eql( newDirector.surname );
+                    res.body.should.have.property( 'bio' ).eql( newDirector.bio );
+                    done();
+                });
+        });
+    });
 });
