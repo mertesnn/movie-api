@@ -76,4 +76,28 @@ describe( '## Director Tests' , () => {
                 });
         });
     });
+
+    describe( '# Update a director.' , () => {
+       it( '( POST /api/directors/:director_id ) Directors Page' , ( done ) => {
+           const updateDirector = {
+               name     : 'updated name',
+               surname  : 'updated surname',
+               bio      : 'updated lorem ipsum dolor'
+           };
+
+           chai.request( server )
+               .put( '/api/directors/' + directorId )
+               .send( updateDirector )
+               .set( 'x-access-token' , token )
+               .end( ( err , res ) => {
+                   res.should.have.status( 200 );
+                   res.body.should.have.be.a( 'object' );
+                   res.body.should.have.property( '_id' ).eql( directorId );
+                   res.body.should.have.property( 'name' ).eql( updateDirector.name );
+                   res.body.should.have.property( 'surname' ).eql( updateDirector.surname );
+                   res.body.should.have.property( 'bio' ).eql( updateDirector.bio );
+                   done();
+               });
+       });
+    });
 });
